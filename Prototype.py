@@ -11,40 +11,199 @@ st.set_page_config(
 # --- ADVANCED UI/UX CUSTOM CSS STYLING ---
 st.markdown("""
     <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Figtree:wght@400;600;700&display=swap');
+    :root {
+        --ink: #14112B;
+        --mist: #E8E3FF;
+        --pink: #FF4F9A;
+        --blue: #3D5AFE;
+        --sun: #FFD23F;
+        --mint: #5CF2C3;
+        --paper: #FFFFFF;
+    }
+    /* ---------- BACKGROUND: topographic "path map" + colour blobs ---------- */
+    .stApp {
+        background-color: var(--mist);
+        background-image:
+            radial-gradient(circle at 8% 12%, rgba(255, 79, 154, 0.28) 0, transparent 30%),
+            radial-gradient(circle at 92% 18%, rgba(92, 242, 195, 0.35) 0, transparent 28%),
+            radial-gradient(circle at 80% 90%, rgba(61, 90, 254, 0.22) 0, transparent 32%),
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='360' height='360' viewBox='0 0 360 360' fill='none' stroke='%2314112B' stroke-opacity='0.09' stroke-width='1.5'%3E%3Ccircle cx='0' cy='0' r='50'/%3E%3Ccircle cx='0' cy='0' r='85'/%3E%3Ccircle cx='360' cy='360' r='50'/%3E%3Ccircle cx='360' cy='360' r='85'/%3E%3Cellipse cx='180' cy='180' rx='30' ry='18' transform='rotate(-20 180 180)'/%3E%3Cellipse cx='180' cy='180' rx='62' ry='38' transform='rotate(-20 180 180)'/%3E%3Cellipse cx='180' cy='180' rx='95' ry='60' transform='rotate(-20 180 180)'/%3E%3Cellipse cx='180' cy='180' rx='130' ry='84' transform='rotate(-20 180 180)'/%3E%3C/svg%3E");
+        background-attachment: fixed;
+        color: var(--ink);
+    }
     .main {
-        background-color: #0b0f19;
-        color: #f3f4f6;
+        color: var(--ink);
     }
-    .stButton>button {
-        background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-        color: white;
-        border-radius: 10px;
-        padding: 0.6rem 1.8rem;
-        font-weight: 600;
-        border: none;
-        box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
-        transition: all 0.3s ease;
+    [data-testid="stHeader"] {
+        background: transparent;
     }
-    .stButton>button:hover {
-        background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
-        box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
-        transform: translateY(-1px);
+    /* ---------- TYPOGRAPHY ---------- */
+    .stMarkdown, .stMarkdown p, .stMarkdown li, label, input, textarea, button, [data-baseweb="select"] {
+        font-family: 'Figtree', sans-serif;
     }
-    .card {
-        background: linear-gradient(145deg, #111827 15%, #1f2937 100%);
-        padding: 1.8rem;
+    .stApp p, .stApp li, .stApp label, .stApp [data-testid="stWidgetLabel"] p {
+        color: var(--ink);
+    }
+    .stApp [data-testid="stWidgetLabel"] p {
+        font-weight: 700;
+    }
+    h1, h2, h3, h4, h5 {
+        font-family: 'Bricolage Grotesque', sans-serif !important;
+        color: var(--ink) !important;
+        letter-spacing: -0.02em;
+    }
+    h1 {
+        font-weight: 800 !important;
+        font-size: 4rem !important;
+        line-height: 1.05;
+        text-shadow: 4px 4px 0 var(--pink);
+    }
+    h3 {
+        font-weight: 800 !important;
+    }
+    h5 {
+        font-weight: 700 !important;
+        opacity: 0.8;
+    }
+    a, .stApp a {
+        color: var(--blue) !important;
+        font-weight: 700;
+        text-decoration: underline wavy var(--pink);
+        text-underline-offset: 4px;
+    }
+    hr {
+        border: none !important;
+        border-top: 3px dashed var(--ink) !important;
+        opacity: 0.35;
+    }
+    /* ---------- BUTTONS (sticker style) ---------- */
+    .stButton>button, .stFormSubmitButton>button {
+        background: var(--pink);
+        color: var(--ink);
         border-radius: 14px;
-        border: 1px solid #374151;
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        padding: 0.7rem 1.8rem;
+        font-weight: 700;
+        border: 2.5px solid var(--ink);
+        box-shadow: 4px 4px 0 var(--ink);
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .stButton>button p, .stFormSubmitButton>button p {
+        color: var(--ink);
+        font-weight: 700;
+        font-size: 1.05rem;
+    }
+    .stButton>button:hover, .stFormSubmitButton>button:hover {
+        background: var(--sun);
+        color: var(--ink);
+        border: 2.5px solid var(--ink);
+        box-shadow: 7px 7px 0 var(--ink);
+        transform: translate(-3px, -3px);
+    }
+    .stButton>button:active, .stFormSubmitButton>button:active {
+        box-shadow: 0 0 0 var(--ink);
+        transform: translate(4px, 4px);
+    }
+    /* ---------- CARDS & BADGES ---------- */
+    .card {
+        background: var(--paper);
+        padding: 1.8rem;
+        border-radius: 22px;
+        border: 3px solid var(--ink);
+        box-shadow: 8px 8px 0 var(--ink);
         margin-bottom: 1.2rem;
     }
     .badge {
-        background-color: #312e81;
-        color: #818cf8;
+        background-color: var(--sun);
+        color: var(--ink);
         padding: 0.3rem 0.8rem;
         border-radius: 20px;
+        border: 2px solid var(--ink);
         font-size: 0.85rem;
-        font-weight: 600;
+        font-weight: 700;
+    }
+    /* ---------- ASSESSMENT FORM ---------- */
+    [data-testid="stForm"] {
+        background: var(--paper);
+        border: 3px solid var(--ink);
+        border-radius: 24px;
+        box-shadow: 10px 10px 0 var(--blue);
+        padding: 2rem;
+    }
+    [data-baseweb="select"] > div {
+        background: #F6F3FF;
+        border: 2.5px solid var(--ink);
+        border-radius: 14px;
+        color: var(--ink);
+        transition: box-shadow 0.15s ease;
+    }
+    [data-baseweb="select"] > div:hover, [data-baseweb="select"] > div:focus-within {
+        box-shadow: 4px 4px 0 var(--mint);
+    }
+    [data-baseweb="select"] * {
+        color: var(--ink);
+    }
+    [data-baseweb="popover"] ul, [data-baseweb="popover"] li {
+        background: var(--paper);
+        color: var(--ink);
+    }
+    [data-baseweb="popover"] li:hover {
+        background: var(--mist);
+    }
+    /* ---------- ALERTS (success / info / warning) ---------- */
+    [data-testid="stAlert"] {
+        border: 3px solid var(--ink);
+        border-radius: 18px;
+        box-shadow: 6px 6px 0 var(--ink);
+        background: var(--mint);
+    }
+    [data-testid="stAlert"] * {
+        color: var(--ink) !important;
+    }
+    [data-testid="stAlert"]:has([data-testid="stAlertContentWarning"]) {
+        background: var(--sun);
+    }
+    [data-testid="stAlert"]:has([data-testid="stAlertContentInfo"]) {
+        background: #FFFFFF;
+        box-shadow: 6px 6px 0 var(--pink);
+    }
+    /* ---------- CHARTS ---------- */
+    [data-testid="stArrowVegaLiteChart"], [data-testid="stVegaLiteChart"] {
+        background: var(--paper);
+        border: 3px solid var(--ink);
+        border-radius: 20px;
+        box-shadow: 6px 6px 0 var(--ink);
+        padding: 1rem;
+    }
+    /* ---------- SIDEBAR / MENTOR CHAT ---------- */
+    [data-testid="stSidebar"] {
+        background: var(--sun);
+        border-right: 3px solid var(--ink);
+    }
+    [data-testid="stSidebar"] > div {
+        background-image: radial-gradient(rgba(20, 17, 43, 0.14) 1.5px, transparent 1.5px);
+        background-size: 18px 18px;
+    }
+    [data-testid="stChatMessage"] {
+        background: var(--paper);
+        border: 2.5px solid var(--ink);
+        border-radius: 18px;
+        box-shadow: 4px 4px 0 var(--ink);
+        margin-bottom: 0.6rem;
+    }
+    [data-testid="stChatInput"] {
+        border: 3px solid var(--ink);
+        border-radius: 16px;
+        background: var(--paper);
+        box-shadow: 4px 4px 0 var(--pink);
+    }
+    /* ---------- MOBILE + ACCESSIBILITY ---------- */
+    @media (max-width: 640px) {
+        h1 { font-size: 2.6rem !important; }
+        [data-testid="stForm"] { padding: 1.1rem; box-shadow: 6px 6px 0 var(--blue); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .stButton>button, .stFormSubmitButton>button, [data-baseweb="select"] > div { transition: none; }
     }
     </style>
 """, unsafe_allow_html=True)
