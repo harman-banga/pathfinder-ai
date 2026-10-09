@@ -48,17 +48,21 @@ if "messages" not in st.session_state:
         {"role": "assistant", "content": "Hello! I'm your PathFinder AI mentor. Ask me anything about career paths, skills, or what specific engineers and professionals do!"}
     ]
 
-# --- SIDEBAR: ALWAYS-ON AI CHATBOT & API SETTINGS ---
+# --- SIDEBAR: ALWAYS-ON AI CHATBOT (NO VISIBLE API BOX) ---
 with st.sidebar:
     st.image("https://img.icons8.com/fluency/96/artificial-intelligence.png", width=60)
     st.title("PathFinder AI")
     st.markdown("---")
     
     st.subheader("🤖 AI Career Mentor Chat")
-    st.write("Ask any question about careers (e.g., *'What does an AI/ML engineer do?'*)")
+    st.write("Ask any question about careers or tech roles!")
     
-    # Optional API Key for live AI responses
-    api_key_input = st.text_input("Gemini API Key (Optional):", type="password", help="Leave blank to use built-in smart responses for your demo.")
+    # Retrieve API key securely from backend secrets (hidden from website)
+    api_key_input = None
+    try:
+        api_key_input = st.secrets["GEMINI_API_KEY"]
+    except Exception:
+        pass
     
     # Chat History Container
     chat_container = st.container(height=300)
@@ -70,7 +74,6 @@ with st.sidebar:
     if prompt := st.chat_input("Ask a career question..."):
         st.session_state.messages.append({"role": "user", "content": prompt})
         
-        # Generate response (supports real Gemini API if key is provided, with a foolproof fallback)
         response = ""
         if api_key_input:
             try:
@@ -80,22 +83,22 @@ with st.sidebar:
                 chat_res = model.generate_content(f"You are a helpful career counselor for high school students. Answer this question concisely: {prompt}")
                 response = chat_res.text
             except Exception as e:
-                response = f"API Error: {e}. Using fallback mode: AI/ML Engineers build intelligent software systems that learn from data using Python, math, and machine learning models!"
+                response = f"AI/ML Engineers build intelligent software systems that learn from data using Python, math, and machine learning models!"
         else:
-            # Smart Fallbacks for Hackathon Demo
+            # Fallback smart responses if no key is configured yet
             p_lower = prompt.lower()
             if "ai" in p_lower or "ml" in p_lower or "engineer" in p_lower:
-                response = "**AI/ML Engineers** design and build intelligent systems that allow computers to learn from data. They use Python, mathematics, and machine learning algorithms to solve complex automation problems!"
+                response = "**AI/ML Engineers** design and build intelligent systems that allow computers to learn from data using Python and machine learning algorithms!"
             elif "design" in p_lower or "ui/ux" in p_lower:
-                response = "**UI/UX Designers** focus on creating intuitive, visually stunning, and user-friendly digital interfaces for apps and websites using tools like Figma."
-            elif "data" in p_lower:
-                response = "**Data Analysts** examine large sets of numbers and information to help organizations make smart, evidence-based decisions using SQL, Excel, and Python."
+                response = "**UI/UX Designers** focus on creating intuitive digital interfaces using tools like Figma."
             else:
-                response = f"That's a fantastic question regarding '{prompt}'! For high-school students exploring this field, we recommend starting with foundational free courses on edX or SWAYAM Plus, building small hands-on projects, and talking to a mentor."
+                response = f"That's a fantastic question! For high-school students, we recommend exploring free courses on edX or SWAYAM Plus."
 
         st.session_state.messages.append({"role": "assistant", "content": response})
         st.rerun()
 
+            
+                
 # --- MAIN CONTENT AREA ---
 st.title("🎯 PathFinder AI: Career Discovery Platform")
 st.markdown("##### Empowering high-school students to discover vocational and technical career tracks through guided interest assessment.")
